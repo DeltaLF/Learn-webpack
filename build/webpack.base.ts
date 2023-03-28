@@ -6,7 +6,7 @@ import * as dotenv from "dotenv";
 const envConfig = dotenv.config({
   path: path.resolve(__dirname, "../env/.env." + process.env.BASE_ENV),
 });
-
+// __dirname: /build/
 console.log("NODE_ENV", process.env.NODE_ENV);
 console.log("BASE_ENV", process.env.BASE_ENV);
 
@@ -32,7 +32,11 @@ const baseConfig: Configuration = {
     ],
   },
   resolve: {
-    extensions: [".tsx", ".ts", ".jsx", ".js"],
+    extensions: [".ts", ".tsx", ".js", ".jsx", ".less", ".css"],
+    alias: {
+      "@": path.join(__dirname, "../src"),
+    },
+    modules: ["node_modules"], //path.resolve(__dirname, "../node_modules")], // access the installed modules
   },
   // plugins
   plugins: [

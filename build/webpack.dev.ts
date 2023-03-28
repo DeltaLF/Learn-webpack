@@ -2,7 +2,9 @@ import path from "path";
 import { merge } from "webpack-merge";
 import { Configuration as WebpackConfiguration } from "webpack";
 import { Configuration as WebpackServerConfiguration } from "webpack-dev-server";
+import WebpackDevServer from "webpack-dev-server";
 import baseConfig from "./webpack.base";
+import { webpack } from "webpack";
 
 interface Configuration extends WebpackConfiguration {
   devServer?: WebpackServerConfiguration;
@@ -15,7 +17,10 @@ const port = "8082";
 const devConfig: Configuration = merge(baseConfig, {
   mode: "development", // skip optimization and faster in bundling
   devtool: "eval-cheap-module-source-map",
-  devServer: {
+});
+
+const devServer = new WebpackDevServer(
+  {
     host,
     port,
     open: true,
@@ -28,6 +33,9 @@ const devConfig: Configuration = merge(baseConfig, {
     },
     headers: { "Access-Control-Allow-Origin": "*" },
   },
-});
+  webpack(devConfig)
+);
+
+devServer.start();
 
 export default devConfig;
