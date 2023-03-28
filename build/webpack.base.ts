@@ -10,6 +10,24 @@ const envConfig = dotenv.config({
 console.log("NODE_ENV", process.env.NODE_ENV);
 console.log("BASE_ENV", process.env.BASE_ENV);
 
+const cssRegex = /\.css$/;
+const sassRegex = /\.(scss|sass)$/;
+const lessRegex = /\.less$/;
+const stylRegex = /\.styl$/;
+
+const styleLoadersArray = [
+  "style-loader",
+  {
+    loader: "css-loader",
+    options: {
+      modules: {
+        localIdentName: "[path][name]__[local]--[hash:5]", // generated css name
+      },
+    },
+  },
+  "postcss-loader", // for css3 compatible
+];
+
 const baseConfig: Configuration = {
   entry: path.join(__dirname, "../src/index.tsx"),
   output: {
@@ -26,8 +44,33 @@ const baseConfig: Configuration = {
         use: "babel-loader", // defined in babel.config.js
       },
       {
-        test: /.css$/, // match css
-        use: ["style-loader", "css-loader"],
+        test: cssRegex, // match css
+        use: styleLoadersArray, //["style-loader", "css-loader"],
+      },
+      {
+        test: lessRegex,
+        use: [
+          ...styleLoadersArray,
+          {
+            loader: "less-loader",
+            options: {
+              lessOptions: {
+                importLoaders: 2,
+                // modules:true
+                // add the above line to not need to add module in files name
+                javascriptEnabled: true, // inorder to wrtie less in js
+              },
+            },
+          },
+        ],
+      },
+      {
+        test: sassRegex,
+        use: [...styleLoadersArray, "sass-loader"],
+      },
+      {
+        test: stylRegex,
+        use: [...styleLoadersArray, "stylus-loader"],
       },
     ],
   },
