@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import lessStyles from "./app.less";
 import scssStyles from "./app.scss";
 import stylStyles from "./app.styl";
@@ -21,6 +21,8 @@ function App() {
       console.log(data);
     });
   console.log(smallJsonExample, largeJsonExample);
+
+  const [count, setCount] = useState(0);
   return (
     <div>
       <h2>webpack5-react-ts</h2>
@@ -39,6 +41,16 @@ function App() {
       <div className={stylStyles["stylBox"]}>
         <div className={stylStyles["box"]}>stylBox</div>
       </div>
+
+      <h3>check whether hot loading is working</h3>
+      <h4>{count}</h4>
+      <button
+        onClick={() => {
+          setCount(count + 1);
+        }}
+      >
+        +1
+      </button>
     </div>
   );
 }

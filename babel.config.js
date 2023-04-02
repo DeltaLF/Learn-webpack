@@ -1,3 +1,5 @@
+const isDev = process.env.NODE_ENV === "development";
+
 module.exports = {
   // from right to left  jsx <- ts
   presets: [
@@ -21,4 +23,8 @@ module.exports = {
     ["@babel/preset-react", { runtime: "automatic" }],
     "@babel/preset-typescript",
   ],
+  plugins: [
+    ["@babel/plugin-proposal-decorators", { legacy: true }],
+    isDev && require.resolve("react-refresh/babel"),
+  ].filter(Boolean),
 };
