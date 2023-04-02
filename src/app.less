@@ -1,5 +1,17 @@
 @color: salmon;
 
+@font-face {
+  font-family: "Delicious Handrawn", cursive; // not works, have to be defined in body selector
+  src: local("Delicious Handrawn"),
+    url("@/assets/fonts/Delicious_Handrawn/DeliciousHandrawn-Regular.ttf")
+      // format("truetype");;
+  // font-weight: bold;
+}
+
+body {
+  font-family: "Delicious Handrawn", cursive; // need to define here to apply font
+}
+
 .lessBox {
   .box {
     color: @color;
@@ -10,5 +22,15 @@
       @arr: "hello", "world";
       content: ` @{arr}.join(" ") .toUpperCase() `;
     }
+  }
+  .smallImage {
+    width: 70px;
+    height: 75px;
+    background: url("@/assets/imgs/8kb_image.jpg") no-repeat;
+  }
+  .bigImage {
+    width: 232px;
+    height: 154px;
+    background: url("@/assets/imgs/13kb_image.jpg") no-repeat;
   }
 }

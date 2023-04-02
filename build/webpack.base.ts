@@ -35,10 +35,59 @@ const baseConfig: Configuration = {
     path: path.join(__dirname, "../dist"),
     clean: true,
     publicPath: "/",
+    assetModuleFilename: "images/[hash][ext][query]",
   },
   // loader
   module: {
     rules: [
+      {
+        test: /\.json$/,
+        type: "asset",
+        generator: {
+          filename: "static/json/[name].[hash][ext][query]",
+        },
+      },
+      {
+        test: /.(woff2?|eot|ttf|otf)$/, // font
+        type: "asset",
+        parser: {
+          dataUrlCondition: {
+            maxSize: 10 * 1024,
+          },
+        },
+        generator: {
+          filename: "static/fonts/[hash][ext][query]",
+        },
+      },
+      {
+        test: /.(mp4|webm|ogg|mp3|wav|flac|aac)$/,
+        type: "asset",
+        parser: {
+          dataUrlCondition: {
+            maxSize: 10 * 1024,
+          },
+        },
+        generator: {
+          filename: "static/media/[hash][ext][query]",
+        },
+      },
+      {
+        test: /\.(png|jpe?g|gif|svg)$/i,
+        type: "asset",
+        parser: {
+          dataUrlCondition: {
+            /*
+            encode data to base64 and append on html(inside main.js since it's used in React jsx)
+            so no need to send http request to fetch data it's good for small resouce
+            */
+
+            maxSize: 10 * 1024, // encode to base64 if < 10kb
+          },
+        },
+        generator: {
+          filename: "static/images/[hash][ext][query]", // generated files
+        },
+      },
       {
         test: /.(ts|tsx)$/, // match ts, tsx
         use: "babel-loader", // defined in babel.config.js

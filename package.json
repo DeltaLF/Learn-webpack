@@ -11,18 +11,20 @@
     "dev:pre": "cross-env NODE_ENV=development BASE_ENV=pre webpack serve -c build/webpack.dev.ts",
     "dev:prod": "cross-env NODE_ENV=development BASE_ENV=production webpack serve -c build/webpack.dev.ts",
     "build": "webpack -c build/webpack.prod.ts",
-    "build:dev": "cross-env NODE_ENV=production BASE_ENV=development webpack serve -c build/webpack.prod.ts",
-    "build:test": "cross-env NODE_ENV=production BASE_ENV=test webpack serve -c build/webpack.prod.ts",
-    "build:pre": "cross-env NODE_ENV=production BASE_ENV=pre webpack serve -c build/webpack.prod.ts",
-    "build:prod": "cross-env NODE_ENV=production BASE_ENV=production webpack serve -c build/webpack.prod.ts"
+    "build:dev": "cross-env NODE_ENV=production BASE_ENV=development webpack -c build/webpack.prod.ts",
+    "build:test": "cross-env NODE_ENV=production BASE_ENV=test webpack -c build/webpack.prod.ts",
+    "build:pre": "cross-env NODE_ENV=production BASE_ENV=pre webpack -c build/webpack.prod.ts",
+    "build:prod": "cross-env NODE_ENV=production BASE_ENV=production webpack -c build/webpack.prod.ts"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "dist": "^0.1.2",
     "dotenv": "^16.0.3",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "serve": "^14.2.0"
   },
   "devDependencies": {
     "@babel/core": "^7.21.3",
