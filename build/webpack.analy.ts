@@ -1,6 +1,15 @@
 import prodConfig from "./webpack.prod";
 const SpeedMesurePlugin = require("speed-measure-webpack-plugin");
-const smp = new SpeedMesurePlugin();
 const { merge } = require("webpack-merge");
+import { Configuration } from "webpack";
+const { BundleAnalyzerPlugin } = require("webpack-bundle-analyzer");
 
-module.exports = smp.wrap(merge(prodConfig, {}));
+const smp = new SpeedMesurePlugin();
+
+const analyConfig: Configuration = smp.wrap(
+  merge(prodConfig, {
+    plugins: [new BundleAnalyzerPlugin()], // analyze bundle result
+  })
+);
+
+export default analyConfig;

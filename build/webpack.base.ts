@@ -3,7 +3,9 @@ import { Configuration, DefinePlugin } from "webpack";
 import HtmlWebpackPlugin from "html-webpack-plugin";
 import * as dotenv from "dotenv";
 import WebpackBar from "webpackbar";
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
+const isDev = process.env.NODE_ENV === "development";
 const envConfig = dotenv.config({
   path: path.resolve(__dirname, "../env/.env." + process.env.BASE_ENV),
 });
@@ -17,8 +19,12 @@ const sassRegex = /\.(scss|sass)$/;
 const lessRegex = /\.less$/;
 const stylRegex = /\.styl$/;
 
+/*
+in dev css is embedded in style tag (for hot loading)
+in build mode; css is extracted as a stand alone css file
+*/
 const styleLoadersArray = [
-  "style-loader",
+  isDev ? "style-loader" : MiniCssExtractPlugin.loader,
   {
     loader: "css-loader",
     options: {
