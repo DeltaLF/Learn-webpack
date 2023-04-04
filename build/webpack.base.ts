@@ -2,6 +2,7 @@ const path = require("path");
 import { Configuration, DefinePlugin } from "webpack";
 import HtmlWebpackPlugin from "html-webpack-plugin";
 import * as dotenv from "dotenv";
+import WebpackBar from "webpackbar";
 
 const envConfig = dotenv.config({
   path: path.resolve(__dirname, "../env/.env." + process.env.BASE_ENV),
@@ -10,6 +11,7 @@ const envConfig = dotenv.config({
 console.log("NODE_ENV", process.env.NODE_ENV);
 console.log("BASE_ENV", process.env.BASE_ENV);
 
+const tsxRegex = /.(ts|tsx)$/; // match ts, tsx
 const cssRegex = /\.css$/;
 const sassRegex = /\.(scss|sass)$/;
 const lessRegex = /\.less$/;
@@ -40,6 +42,11 @@ const baseConfig: Configuration = {
   // loader
   module: {
     rules: [
+      {
+        test: tsxRegex, //thread-loader not support for MiniCSsExtractPlugin
+        exclude: /node_modules/,
+        use: ["thread-loader", "babel-loader"], // babel-loader defined in babel.config.js
+      },
       {
         test: /\.json$/,
         type: "asset",
@@ -87,10 +94,6 @@ const baseConfig: Configuration = {
         generator: {
           filename: "static/images/[hash][ext][query]", // generated files
         },
-      },
-      {
-        test: /.(ts|tsx)$/, // match ts, tsx
-        use: "babel-loader", // defined in babel.config.js
       },
       {
         test: cssRegex, // match css
@@ -155,7 +158,16 @@ const baseConfig: Configuration = {
       "process.env.BASE_ENV": JSON.stringify(process.env.BASE_ENV),
       "process.env.NODE_ENV": JSON.stringify(process.env.NODE_ENV),
     }),
+    new WebpackBar({
+      color: "#85d",
+      basic: false, // a simple logger
+      profile: false,
+    }),
   ],
+  cache: {
+    type: "filesystem",
+    allowCollectingMemory: true,
+  },
 };
 
 export default baseConfig;
