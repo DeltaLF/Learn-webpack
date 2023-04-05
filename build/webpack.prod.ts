@@ -21,7 +21,7 @@ const prodConfig: Configuration = merge(baseConfig, {
       ],
     }),
     new MiniCssExtractPlugin({
-      filename: "static/css/[name].css", // exatracted css
+      filename: "static/css/[name].[contenthash:8].css", // exatracted css
     }),
     new CompressionPlugin({
       test: /\.(js|css)$/, // only generat compressed js,css
@@ -32,6 +32,27 @@ const prodConfig: Configuration = merge(baseConfig, {
     }),
   ],
   optimization: {
+    splitChunks: {
+      // split code into chunks
+      cacheGroups: {
+        vendors: {
+          // extract node_modules
+          test: /node_modules/, // only match node_modules
+          name: "vendors", //name the extracted file as vendors
+          minChunks: 1, // extract it as long as it used once
+          chunks: "initial", //not care async, only take those can be access while initialization
+          minSize: 0, // extract if code size >0
+          priority: 1,
+        },
+        commons: {
+          // extract common code
+          name: "commons", // name the extracted file as commons
+          minChunks: 2, //extract it if it is used twice
+          chunks: "initial",
+          minSize: 0,
+        },
+      },
+    },
     minimizer: [
       new CssMinimizerPlugin(), // minimize css
       new TerserPlugin({

@@ -18,7 +18,9 @@ const cssRegex = /\.css$/;
 const sassRegex = /\.(scss|sass)$/;
 const lessRegex = /\.less$/;
 const stylRegex = /\.styl$/;
-
+const fontRegex = /.(woff2?|eot|ttf|otf)$/;
+const imageRegex = /\.(png|jpe?g|gif|svg)$/i;
+const mediaRegex = /.(mp4|webm|ogg|mp3|wav|flac|aac)$/;
 /*
 in dev css is embedded in style tag (for hot loading)
 in build mode; css is extracted as a stand alone css file
@@ -39,7 +41,7 @@ const styleLoadersArray = [
 const baseConfig: Configuration = {
   entry: path.join(__dirname, "../src/index.tsx"),
   output: {
-    filename: "static/js/[name].js", // every output js name
+    filename: "static/js/[name][chunkhash:8].js", // every output js name
     path: path.join(__dirname, "../dist"),
     clean: true,
     publicPath: "/",
@@ -61,7 +63,7 @@ const baseConfig: Configuration = {
         },
       },
       {
-        test: /.(woff2?|eot|ttf|otf)$/, // font
+        test: fontRegex, // font
         type: "asset",
         parser: {
           dataUrlCondition: {
@@ -69,11 +71,11 @@ const baseConfig: Configuration = {
           },
         },
         generator: {
-          filename: "static/fonts/[hash][ext][query]",
+          filename: "static/fonts/[name].[contenthash:8][ext]",
         },
       },
       {
-        test: /.(mp4|webm|ogg|mp3|wav|flac|aac)$/,
+        test: mediaRegex,
         type: "asset",
         parser: {
           dataUrlCondition: {
@@ -81,11 +83,11 @@ const baseConfig: Configuration = {
           },
         },
         generator: {
-          filename: "static/media/[hash][ext][query]",
+          filename: "static/media/[name].[contenthash:8][ext]",
         },
       },
       {
-        test: /\.(png|jpe?g|gif|svg)$/i,
+        test: imageRegex,
         type: "asset",
         parser: {
           dataUrlCondition: {
@@ -98,7 +100,7 @@ const baseConfig: Configuration = {
           },
         },
         generator: {
-          filename: "static/images/[hash][ext][query]", // generated files
+          filename: "static/images/[name].[contenthash:8][ext]", // generated files
         },
       },
       {
