@@ -7,6 +7,10 @@ import smallImage from "@/assets/imgs/8kb_image.jpg";
 import largeImage from "@/assets/imgs/13kb_image.jpg";
 import smallJsonExample from "./small_example.json";
 import largeJsonExample from "./large_example.json";
+import { TreeShakingOne, TreeShakingTwo } from "./components";
+
+import "./unusedCss.css";
+import "./unusedScss.scss";
 
 function App() {
   const json = atob((smallJsonExample as unknown as string).substring(29));
@@ -51,6 +55,9 @@ function App() {
       >
         +1
       </button>
+
+      <h2>Tree shaking</h2>
+      <TreeShakingOne />
     </div>
   );
 }

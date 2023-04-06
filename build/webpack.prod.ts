@@ -8,6 +8,10 @@ import CssMinimizerPlugin from "css-minimizer-webpack-plugin";
 import CompressionPlugin from "compression-webpack-plugin";
 import TerserPlugin from "terser-webpack-plugin";
 
+// tree shaking css
+const globAll = require("glob-all");
+const { PurgeCSSPlugin } = require("purgecss-webpack-plugin");
+
 const prodConfig: Configuration = merge(baseConfig, {
   mode: "production", // prod mode: enable tree-shaking, compressing, other optimization
   plugins: [
@@ -23,6 +27,28 @@ const prodConfig: Configuration = merge(baseConfig, {
     new MiniCssExtractPlugin({
       filename: "static/css/[name].[contenthash:8].css", // exatracted css
     }),
+    // tree shaking css check all tsx under src and index.html under public that useing class, id tag
+    // only bundle those in use
+    new PurgeCSSPlugin({
+      paths: globAll.sync(
+        [
+          `${path.join(__dirname, "../src")}/**/*`,
+          path.join(__dirname, "../public/index.html"), //after index.html is added, selectors which select the tags that defined at index.html are not shaken off
+        ],
+        {
+          nodir: true,
+        }
+      ),
+      // use only as the entry point of purgecss-webpack-plugin
+      // only: ["dist"],
+      only: ["aaa"],
+      // only: ["bundle", "vendor"],
+      // only: ["main*", "*", "main"],
+      safelist: {
+        standard: [/^ant-/], // white lift tag start with ant
+      },
+    }),
+
     new CompressionPlugin({
       test: /\.(js|css)$/, // only generat compressed js,css
       filename: "[path][base].gz",
